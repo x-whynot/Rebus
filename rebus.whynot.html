@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaTest</title>
+    <style>
+        body {
+            background-image: url('https://i.imgur.com/vrfC71Y.jpeg');
+            background-size: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .rebus {
+            text-align: center;
+            color: white;
+        }
+
+        .explainRebus {
+            text-align: center;
+            color: white;
+            font-size: 20px;
+            margin-left: 30px;
+            margin-right: 30px;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .buttonUp, .buttonDown {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+
+        .image-button {
+            background-size: cover;
+            background-position: center;
+            width: 200px;
+            height: 200px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            outline: none;
+            margin: 5px;
+        }
+
+        .image-button1 {
+            background-image: url('https://i.imgur.com/kwdGR41.jpeg');
+        }
+
+        .image-button2 {
+            background-image: url('https://i.imgur.com/l5nie4S.jpeg');
+        }
+
+        .image-button3 {
+            background-image: url('https://i.imgur.com/bj8xeZx.jpeg');
+        }
+
+        .image-button4 {
+            background-image: url('https://i.imgur.com/n7SI1p8.jpeg');
+        }
+
+        .image-button5 {
+            background-image: url('https://i.imgur.com/MYyKo71.jpeg');
+        }
+
+        .image-button6 {
+            background-image: url('https://i.imgur.com/JsGkneY.jpeg');
+        }
+
+        .image-button7 {
+            background-image: url('https://i.imgur.com/lPm9L28.jpeg');
+        }
+
+        .image-button8 {
+            background-image: url('https://i.imgur.com/0spp28S.jpeg');
+        }
+
+        .image-button9 {
+            background-image: url('https://i.imgur.com/1Wl2rgt.jpeg');
+        }
+
+        .image-button10 {
+            background-image: url('https://i.imgur.com/Sy6lU5B.jpeg');
+        }
+
+        button.highlighted {
+            border: 10px solid #00ff00;
+        }
+
+        .answerArea {
+            margin: 5px;
+            font-family: Arial, Helvetica;
+            font-variant: small-caps;
+        }
+
+        .resultArea {
+            margin: 5px;
+            font-family: Arial, Helvetica;
+            font-variant: small-caps;
+        }
+
+        .checkButton {
+            background-color: yellow;
+            color: black;
+            font-family: Arial, Helvetica;
+            font-variant: small-caps;
+            margin: 5px;
+            width: 100px;
+            height: 40px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="title">
+            <h1 class="rebus">Rebus</h1>
+            <h2 class="explainRebus">The puzzle consists of ten images, each of which must be guessed. You need to select an image, and enter the answer in the text field and click "Check". If the answer is correct, the image is replaced by the answer word, if it is incorrect, an error message is displayed. When all the images are solved, a greeting and the number of errors appear.</h2>
+        </div>
+        <div class="buttonUp">
+            <button class="image-button image-button1" id="car"></button>
+            <button class="image-button image-button2" id="dog"></button>
+            <button class="image-button image-button3" id="cat"></button>
+            <button class="image-button image-button4" id="ball"></button>
+            <button class="image-button image-button5" id="phone"></button>
+        </div>
+        <div class="buttonDown">
+            <button class="image-button image-button6" id="book"></button>
+            <button class="image-button image-button7" id="headphones"></button>
+            <button class="image-button image-button8" id="hammer"></button>
+            <button class="image-button image-button9" id="knife"></button>
+            <button class="image-button image-button10" id="tv"></button>
+        </div>
+        <div>
+            <textarea id="answerArea" name="answerArea" placeholder="Write your answer" cols="40" rows="2"></textarea>
+        </div>
+        <div>
+            <textarea id="resultArea" name="resultArea" placeholder="The result of your answer will be here" readonly cols="40" rows="2"></textarea>
+        </div>
+        <div>
+            <button id="checkButton" class="checkButton">Check</button>
+        </div>
+    </div>
+
+    <script>
+        const correctAnswers = {
+            car: 'Car',
+            dog: 'Dog',
+            cat: 'Cat',
+            ball: 'Ball',
+            phone: 'Phone',
+            book: 'Book',
+            headphones: 'Headphones',
+            hammer: 'Hammer',
+            knife: 'Knife',
+            tv: 'TV'
+        };
+
+        let mistakes = 0;
+        let solved = 0;
+
+        document.querySelectorAll('.image-button').forEach(button => {
+            button.addEventListener('click', function() {
+                document.querySelectorAll('.image-button').forEach(btn => btn.classList.remove('highlighted'));
+                button.classList.add('highlighted');
+            });
+        });
+
+        document.getElementById('checkButton').addEventListener('click', function() {
+            const answerArea = document.getElementById('answerArea');
+            const resultArea = document.getElementById('resultArea');
+            const highlightedButton = document.querySelector('.image-button.highlighted');
+
+            if (highlightedButton) {
+                const buttonId = highlightedButton.id;
+                const userAnswer = answerArea.value.trim().toLowerCase();
+                const correctAnswer = correctAnswers[buttonId].toLowerCase();
+
+                if (userAnswer === correctAnswer) {
+                    highlightedButton.textContent = correctAnswers[buttonId];
+                    highlightedButton.style.backgroundImage = 'none';
+                    resultArea.value = "The answer is correct!";
+                    resultArea.style.color = "green";
+                    solved++;
+                    highlightedButton.disabled = true;
+                    highlightedButton.style.color = "#00ff00";
+                    highlightedButton.style.backgroundColor = "white";
+                    highlightedButton.style.fontSize = "20px";
+                } else {
+                    resultArea.value = "The answer is not correct. Try again)";
+                    resultArea.style.color = "red";
+                    mistakes++;
+                }
+
+                answerArea.value = '';
+
+                if (solved === Object.keys(correctAnswers).length) {
+                    alert(`Congratulations! You solved all puzzles with ${mistakes} mistakes.`);
+                }
+            } else {
+                resultArea.value = "Choose a picture to answer.";
+                resultArea.style.color = "red";
+            }
+        });
+    </script>
+</body>
+</html>
